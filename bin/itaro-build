@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+const build = require('../dist/commands/build').default
+build()

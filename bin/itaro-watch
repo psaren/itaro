@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+const watch = require('../dist/commands/watch').default
+watch()
