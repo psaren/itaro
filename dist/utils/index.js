@@ -17,3 +17,5 @@ function printPkgVersion() {
 exports.printPkgVersion = printPkgVersion;
 exports.isObject = (arg) => Object.prototype.toString.call(arg) === '[object Object]';
 exports.isArray = (arg) => Array.isArray(arg);
+exports.isTest = process.env.NODE_ENV === 'dev';
+exports.sleep = (timeout) => new Promise((resolve) => setTimeout(resolve, timeout));

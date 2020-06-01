@@ -2,18 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const chokidar = require("chokidar");
 const path = require("path");
-const build_1 = require("./build");
 const chalk = require("chalk");
+const build_1 = require("./build");
 const watch = () => {
-    const files = path.resolve(process.cwd(), './src/**/*.{[jt]s?(x),{sc,c,le}ss,json,html,styl}');
+    const builder = new build_1.default(true);
+    const files = path.resolve(process.cwd(), './src/**/*.{[jt]s?(x),{sc,c,le}ss,json,html,styl,vue}');
     const watcher = chokidar.watch(files, {
         ignored: /(^|[/\\])\../,
         persistent: true
     });
-    build_1.default();
+    builder.run();
     watcher.on('change', (file) => {
         console.log(chalk.green('file change :>> '), file);
-        build_1.default();
+        builder.run();
     });
 };
 exports.default = watch;

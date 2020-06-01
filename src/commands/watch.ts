@@ -1,18 +1,19 @@
 import * as chokidar from 'chokidar'
 import * as path from 'path'
-import build from './build'
 import * as chalk from 'chalk'
+import Builder from './build'
 
 const watch = () => {
+  const builder = new Builder(true)
   const files = path.resolve(process.cwd(), './src/**/*.{[jt]s?(x),{sc,c,le}ss,json,html,styl,vue}')
   const watcher = chokidar.watch(files, {
     ignored: /(^|[/\\])\../, // ignore dotfiles
     persistent: true
   })
-  build()
+  builder.run()
   watcher.on('change', (file) => {
     console.log(chalk.green('file change :>> '), file)
-    build()
+    builder.run()
   })
 }
 

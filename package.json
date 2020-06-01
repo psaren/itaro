@@ -8,13 +8,20 @@
     "dist"
   ],
   "scripts": {
+    "build:weapp": "node ./dist/mock/index.js output/weapp",
+    "build:alipay": "node ./dist/mock/index.js output/alipay",
+    "build:h5": "node ./dist/mock/index.js output/h5",
+    "build:jd": "node ./dist/mock/index.js output/jd",
+    "build:swan": "node ./dist/mock/index.js output/swan",
+    "build:qq": "node ./dist/mock/index.js output/qq",
+    "build:tt": "node ./dist/mock/index.js output/tt",
     "build": "npm run clean && npm run prod",
     "dev": "tsc -w",
-    "prod": "cross-env NODE_ENV=prod tsc",
+    "prod": "tsc",
     "test:dev": "cross-env NODE_ENV=dev ./bin/itaro build",
     "test:dev-w": "cross-env NODE_ENV=dev ./bin/itaro watch",
-    "clean": "rimraf dist",
-    "update": "npm run build && npm uninstall -g itaro && npm install -g",
+    "clean": "npx rimraf dist",
+    "update": "npm run build && npm uninstall -g itaro && cnpm i && npm install -g",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix"
   },
@@ -27,6 +34,7 @@
   "dependencies": {
     "@types/node": "^14.0.6",
     "chalk": "^4.0.0",
+    "chokidar": "^3.4.0",
     "commander": "^5.1.0",
     "shelljs": "^0.8.4"
   },
@@ -35,7 +43,6 @@
     "@types/shelljs": "^0.8.8",
     "@typescript-eslint/eslint-plugin": "^3.0.2",
     "@typescript-eslint/parser": "^3.0.2",
-    "chokidar": "^3.4.0",
     "cross-env": "^7.0.2",
     "eslint": "^7.1.0",
     "eslint-config-standard": "^14.1.1",
