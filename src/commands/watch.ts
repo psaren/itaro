@@ -4,7 +4,7 @@ import build from './build'
 import * as chalk from 'chalk'
 
 const watch = () => {
-  const files = path.resolve(process.cwd(), './src/**/*.{[jt]s?(x),{sc,c,le}ss,json,html,styl}')
+  const files = path.resolve(process.cwd(), './src/**/*.{[jt]s?(x),{sc,c,le}ss,json,html,styl,vue}')
   const watcher = chokidar.watch(files, {
     ignored: /(^|[/\\])\../, // ignore dotfiles
     persistent: true
