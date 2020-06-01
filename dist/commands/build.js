@@ -14,7 +14,8 @@ const VALID_OPTIONS = [
     'h5',
     'rn',
     'qq',
-    'quickapp'
+    'quickapp',
+    'jd'
 ];
 function getBuildOptions(arr, output) {
     if (!Array.isArray(arr))
@@ -54,7 +55,7 @@ function build() {
     }
     const config = getBuildConfig();
     const tempDist = path.resolve(rootCwd, config.dist || './dist');
-    shell.exec('chcp 65001');
+    // shell.exec('chcp 65001')
     const options = getBuildOptions(config.options, config.output);
     for (const option of options) {
         const { name, command, output } = option;
@@ -62,10 +63,15 @@ function build() {
             continue;
         try {
             const outputPath = path.resolve(rootCwd, output);
-            shell.exec(command);
-            shell.exec(`mkdir ${outputPath} -p`);
-            shell.exec(`\cp ${tempDist}/* ${outputPath}`);
-            console.log(chalk.green(`build ${name} succefully!`));
+            if (pkgJson.scripts[command.replace('npm run ', '')]) {
+                shell.exec(command);
+                shell.mkdir('-p', outputPath);
+                shell.exec(`\\cp ${tempDist}/* ${outputPath}`);
+                console.log(chalk.green(`build ${name} succefully!`));
+            }
+            else {
+                console.log(chalk.red('缺少scripts >> '), command);
+            }
         }
         catch (err) {
             console.log(chalk.red(`build ${name} failure!`));

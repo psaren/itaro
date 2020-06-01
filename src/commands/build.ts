@@ -1,9 +1,9 @@
-import * as path from 'path';
-import * as shell from 'shelljs';
-import * as chalk from 'chalk';
-import { isObject } from '../utils';
-const rootCwd = process.cwd();
-const pkgJson = require(path.resolve(rootCwd, './package.json'));
+import * as path from 'path'
+import * as shell from 'shelljs'
+import * as chalk from 'chalk'
+import { isObject } from '../utils'
+const rootCwd = process.cwd()
+const pkgJson = require(path.resolve(rootCwd, './package.json'))
 
 const VALID_OPTIONS = [
   'weapp',
@@ -13,8 +13,9 @@ const VALID_OPTIONS = [
   'h5',
   'rn',
   'qq',
-  'quickapp'
-];
+  'quickapp',
+  'jd'
+]
 
 interface Item {
   name: string;
@@ -22,7 +23,7 @@ interface Item {
   output: string;
 }
 
-function getBuildOptions(arr: (Item|string)[], output): Item[] {
+function getBuildOptions (arr: (Item|string)[], output): Item[] {
   if (!Array.isArray(arr)) return []
   const res: Item[] = []
   arr.forEach(item => {
@@ -47,41 +48,45 @@ function getBuildOptions(arr: (Item|string)[], output): Item[] {
 }
 
 function getBuildConfig () {
-  let buildConfig =  pkgJson.taro && isObject(pkgJson.taro.build) ? pkgJson.taro.build : {}
+  let buildConfig = pkgJson.taro && isObject(pkgJson.taro.build) ? pkgJson.taro.build : {}
 
   const defaultConfig = {
     output: './output',
     excludes: [],
     options: VALID_OPTIONS
-  };
+  }
 
   buildConfig = Object.assign({}, defaultConfig, buildConfig)
   return buildConfig
 }
 
-export default function build() {
+export default function build () {
   if (process.env.NODE_ENV === 'dev') {
-    console.log('main', );
+    console.log('main')
     return
   }
 
-  const config = getBuildConfig();
-  const tempDist = path.resolve(rootCwd, config.dist || './dist');
-  shell.exec('chcp 65001');
-  
-  const options = getBuildOptions(config.options, config.output);
+  const config = getBuildConfig()
+  const tempDist = path.resolve(rootCwd, config.dist || './dist')
+  // shell.exec('chcp 65001')
+
+  const options = getBuildOptions(config.options, config.output)
   for (const option of options) {
-    const { name, command, output } = option;
-    if (config.excludes.includes(name) || !VALID_OPTIONS.includes(name)) continue;
-      try {
-        const outputPath = path.resolve(rootCwd, output)
-        shell.exec(command);
-        shell.exec(`mkdir ${outputPath} -p`);
-        shell.exec(`\cp ${tempDist}/* ${outputPath}`);
-        console.log(chalk.green(`build ${name} succefully!`));
-      } catch (err) {
-        console.log(chalk.red(`build ${name} failure!`));
-        console.error(err);
+    const { name, command, output } = option
+    if (config.excludes.includes(name) || !VALID_OPTIONS.includes(name)) continue
+    try {
+      const outputPath = path.resolve(rootCwd, output)
+      if (pkgJson.scripts[command.replace('npm run ', '')]) {
+        shell.exec(command)
+        shell.mkdir('-p', outputPath)
+        shell.exec(`\\cp ${tempDist}/* ${outputPath}`)
+        console.log(chalk.green(`build ${name} succefully!`))
+      } else {
+        console.log(chalk.red('缺少scripts >> '), command)
       }
+    } catch (err) {
+      console.log(chalk.red(`build ${name} failure!`))
+      console.error(err)
+    }
   }
 }

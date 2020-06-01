@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "A tool for taro build multiple app",
   "main": "dist/index.js",
-  "files" : [
+  "files": [
     "bin",
     "dist"
   ],
@@ -15,8 +15,8 @@
     "test:dev-w": "cross-env NODE_ENV=dev ./bin/itaro watch",
     "clean": "rimraf dist",
     "update": "npm run build && npm uninstall -g itaro && npm install -g",
-    "lint": "eslint src/**/*.ts --fix",
-    "lint:typecheck": "eslint -p tsconfig.json src/**/*.ts --fix"
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix"
   },
   "keywords": [],
   "author": "",
@@ -44,6 +44,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "rimraf": "^3.0.2",
-    "typescript": "^3.8.3"
+    "typescript": "3.8.3"
   }
 }

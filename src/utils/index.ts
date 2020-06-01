@@ -14,6 +14,6 @@ export function printPkgVersion () {
   console.log()
 }
 
-export const isObject = (arg): boolean => Object.prototype.toString.call(arg) === '[object Object]';
+export const isObject = (arg): boolean => Object.prototype.toString.call(arg) === '[object Object]'
 
 export const isArray = (arg): boolean => Array.isArray(arg)
