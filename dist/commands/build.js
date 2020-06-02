@@ -18,6 +18,7 @@ const rootCwd = process.cwd();
 const pkgJson = require(path.resolve(rootCwd, './package.json'));
 const numCPUs = require('os').cpus().length;
 const itaroBuildTime = 'Itaro Build Time';
+const defaultOutput = 'itaro';
 const VALID_OPTIONS = [
     'weapp',
     'swan',
@@ -33,7 +34,7 @@ class Builder {
     constructor(isWatch = false) {
         this.runningTasks = 0; // 正在运行的任务数量
         this.tasks = []; // 任务列表
-        this.restoreTimeout = 1500; // 还原配置的时间
+        this.restoreTimeout = 2000; // 还原配置的时间
         this.isWatch = isWatch;
         this.remainingTasks = 0;
     }
@@ -59,9 +60,9 @@ class Builder {
         return res;
     }
     getBuildConfig() {
-        let buildConfig = pkgJson.taro && utils_1.isObject(pkgJson.taro.build) ? pkgJson.taro.build : {};
+        let buildConfig = pkgJson[defaultOutput] && utils_1.isObject(pkgJson[defaultOutput].build) ? pkgJson[defaultOutput].build : {};
         const defaultConfig = {
-            output: './output',
+            output: defaultOutput,
             excludes: [],
             options: VALID_OPTIONS
         };

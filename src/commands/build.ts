@@ -7,6 +7,7 @@ const rootCwd = process.cwd()
 const pkgJson = require(path.resolve(rootCwd, './package.json'))
 const numCPUs = require('os').cpus().length
 const itaroBuildTime = 'Itaro Build Time'
+const defaultOutput = 'itaro'
 
 const VALID_OPTIONS = [
   'weapp',
@@ -40,15 +41,20 @@ export default class Builder implements BuilderInterFace {
   restoreTimeout: number;
   remainingTasks: number;
   isWatch: boolean;
-  constructor (isWatch = false) {
-    this.runningTasks = 0 // 正在运行的任务数量
-    this.tasks = [] // 任务列表
-    this.restoreTimeout = 1500 // 还原配置的时间
+  constructor(isWatch = false) {
+    // 正在运行的任务数量
+    this.runningTasks = 0
+    // 任务列表
+    this.tasks = []
+    // 还原配置的时间
+    this.restoreTimeout = 2000
+    // 是否开启监听
     this.isWatch = isWatch
+    // 剩余任务数量，会在 run 方法执行第一个任务前赋值
     this.remainingTasks = 0
   }
 
-  getBuildOptions (arr: (Item|string)[], output): Item[] {
+  getBuildOptions(arr: (Item | string)[], output): Item[] {
     if (!isArray(arr)) return []
     const res: Item[] = []
     arr.forEach(item => {
@@ -72,11 +78,11 @@ export default class Builder implements BuilderInterFace {
     return res
   }
 
-  getBuildConfig () {
-    let buildConfig = pkgJson.taro && isObject(pkgJson.taro.build) ? pkgJson.taro.build : {}
+  getBuildConfig() {
+    let buildConfig = pkgJson[defaultOutput] && isObject(pkgJson[defaultOutput].build) ? pkgJson[defaultOutput].build : {}
 
     const defaultConfig = {
-      output: './output',
+      output: defaultOutput,
       excludes: [],
       options: VALID_OPTIONS
     }
@@ -86,7 +92,7 @@ export default class Builder implements BuilderInterFace {
   }
 
   // 生成新的 build 任务
-  genNewTask (name: string, command: string, output: string) {
+  genNewTask(name: string, command: string, output: string) {
     return () => new Promise((resolve, reject) => {
       try {
         const outputPath = path.resolve(rootCwd, output)
@@ -126,7 +132,7 @@ export default class Builder implements BuilderInterFace {
     })
   }
 
-  reduceTasksNum () {
+  reduceTasksNum() {
     this.remainingTasks--
     if (this.runningTasks > 0) {
       this.runningTasks--
@@ -134,7 +140,7 @@ export default class Builder implements BuilderInterFace {
   }
 
   // 执行下一个 build 任务
-  async runNextTasks () {
+  async runNextTasks() {
     const { tasks, runningTasks, restoreTimeout } = this
     while (tasks.length > 0 && runningTasks < numCPUs) {
       this.runningTasks++
@@ -153,7 +159,7 @@ export default class Builder implements BuilderInterFace {
     }
   }
 
-  async run () {
+  async run() {
     console.log(chalk.green('itaro build running...'))
     console.time(itaroBuildTime)
     const config = this.getBuildConfig()
