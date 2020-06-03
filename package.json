@@ -23,7 +23,8 @@
     "clean": "npx rimraf dist",
     "update": "npm run build && npm uninstall -g itaro && cnpm i && npm install -g",
     "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix"
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "genlog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "keywords": [
     "itaro",
