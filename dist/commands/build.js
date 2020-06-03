@@ -32,10 +32,15 @@ const VALID_OPTIONS = [
 ];
 class Builder {
     constructor(isWatch = false) {
-        this.runningTasks = 0; // 正在运行的任务数量
-        this.tasks = []; // 任务列表
-        this.restoreTimeout = 2000; // 还原配置的时间
+        // 正在运行的任务数量
+        this.runningTasks = 0;
+        // 任务列表
+        this.tasks = [];
+        // 还原配置的时间
+        this.restoreTimeout = 3000;
+        // 是否开启监听
         this.isWatch = isWatch;
+        // 剩余任务数量，会在 run 方法执行第一个任务前赋值
         this.remainingTasks = 0;
     }
     getBuildOptions(arr, output) {
