@@ -47,7 +47,7 @@ export default class Builder implements BuilderInterFace {
     // 任务列表
     this.tasks = []
     // 还原配置的时间
-    this.restoreTimeout = 3000
+    this.restoreTimeout = 10 * 1000
     // 是否开启监听
     this.isWatch = isWatch
     // 剩余任务数量，会在 run 方法执行第一个任务前赋值
