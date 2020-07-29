@@ -1,6 +1,6 @@
 {
   "name": "itaro",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A tool for taro build multiple app",
   "main": "dist/index.js",
   "files": [
